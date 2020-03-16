@@ -18,7 +18,4 @@ export default {
 };
 </script>
 <style lang='scss'>
-.app-container{
-    margin: 10px 20px;
-}
 </style>

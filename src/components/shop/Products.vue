@@ -1,0 +1,50 @@
+<template>
+  <div class="products app-container">
+    <div class="row">
+      <div class="col-md-12">
+        <card-loader :loopCount="8" v-if="loading" />
+        <products-list :products_list="products" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+import CardLoader from "@/components/shared/CardLoader";
+import ProductsList from "@/components/shop/ProductsList";
+const fb = require("../../fireBaseConfig");
+export default {
+  name: "products",
+  components: { CardLoader, ProductsList },
+  data() {
+    return {
+      loading: false,
+      products_list: []
+    };
+  },
+  computed: {
+    ...mapGetters("shops", { products: "getAllProducts" })
+  },
+  created() {
+    this.getAll();
+  },
+  methods: {
+    ...mapActions("shops", ["getProducts"]),
+    async getAll() {
+      this.loading = true;
+      const products = [];
+      await fb.productsCollection.get().then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+          products.push({ id: doc.id, ...doc.data() });
+        });
+      });
+      this.getProducts(products);
+      this.loading = false;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
