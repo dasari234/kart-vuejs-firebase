@@ -1,13 +1,15 @@
 <template>
   <div class="app-container">
-    <h1>HOME</h1>
+    <Products />
     
   </div>
 </template>
 
 <script>
+import Products from '@/components/shop/Products';
 export default {
   name: 'Home',
+  components: { Products },
 }
 </script>
 

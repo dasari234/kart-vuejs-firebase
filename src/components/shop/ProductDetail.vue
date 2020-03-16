@@ -1,6 +1,7 @@
 <template>
   <div class="app-container list">
-    <div v-cloak class="list_item">
+    <card-loader :loopCount="1" v-if="isLoading" />
+    <div v-cloak class="list_item" v-if="!isLoading">
       <h2>{{product.name}}</h2>
       <h4>{{product.description}}</h4>
       <h6>₹{{product.price}}</h6>
@@ -29,32 +30,34 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
+import CardLoader from "@/components/shared/CardLoader";
 const fb = require("../../fireBaseConfig");
+
 export default {
   name: "productDetails",
+  components: { CardLoader },
   data() {
     return {
-      isLoading: false,
-      product: {
-        name: "",
-        description: "",
-        price: ""
-      }
-    }
+      isLoading: false
+    };
+  },
+  computed: {
+    ...mapGetters("shops", { product: "getProductDetails" })
   },
   created() {
     this.getDetails();
   },
   methods: {
-    ...mapActions("shops", ["addToCart"]),
+    ...mapActions("shops", ["addToCart", "getProduct"]),
     async getDetails() {
       this.isLoading = true;
       await fb.productsCollection
         .doc(this.$route.params.id)
         .get()
         .then(querySnapshot => {
-          this.product = { id: querySnapshot.id, ...querySnapshot.data() };
+          const product = { id: querySnapshot.id, ...querySnapshot.data() };
+          this.getProduct(product);
           this.isLoading = false;
         });
     },

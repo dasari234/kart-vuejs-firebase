@@ -2,7 +2,7 @@
   <div class="products app-container">
     <div class="row">
       <div class="col-md-12">
-        <card-loader :loopCount="8" v-if="loading" />
+        <card-loader :loopCount="8" v-if="isLoading" />
         <products-list :products_list="products" />
       </div>
     </div>
@@ -19,7 +19,7 @@ export default {
   components: { CardLoader, ProductsList },
   data() {
     return {
-      loading: false,
+      isLoading: false,
       products_list: []
     };
   },
@@ -32,7 +32,7 @@ export default {
   methods: {
     ...mapActions("shops", ["getProducts"]),
     async getAll() {
-      this.loading = true;
+      this.isLoading = true;
       const products = [];
       await fb.productsCollection.get().then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
@@ -40,7 +40,7 @@ export default {
         });
       });
       this.getProducts(products);
-      this.loading = false;
+      this.isLoading = false;
     }
   }
 };

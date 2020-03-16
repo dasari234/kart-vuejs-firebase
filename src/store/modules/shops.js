@@ -3,10 +3,14 @@ export default {
     state:{
         cart:[],
         products:null,
+        product:null
     },
     actions:{
         getProducts: ({commit}, products) => {
             commit('UPDATE_PRODUCTS', products)
+        },
+        getProduct: ({commit}, product) => {
+            commit('UPDATE_PRODUCT_DETAILS', product)
         },
         addToCart: ({commit}, product) => {
            // const cart = [...state.cart, product];
@@ -19,6 +23,9 @@ export default {
     mutations:{
         UPDATE_PRODUCTS: (state, products) =>{
             state.products = products;
+        },
+        UPDATE_PRODUCT_DETAILS:(state, product) =>{
+            state.product = product;
         },
         ADD_ITEM_TO_CART: (state, {id, qtyType, qty}) => {
             const record = state.cart.find(p => p.id === id)
@@ -55,6 +62,7 @@ export default {
                 }
             });
         },
-        cartCount: state => state.cart.length
+        cartCount: state => state.cart.length,
+        getProductDetails: state => state.product
     }
 }
