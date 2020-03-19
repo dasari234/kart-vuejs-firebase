@@ -6,8 +6,7 @@
 
 <script>
 import Products from "@/components/shop/Products";
-const fb = require("../fireBaseConfig");
-import { mapActions } from "vuex";
+
 export default {
   name: "Home",
   components: { Products },  
