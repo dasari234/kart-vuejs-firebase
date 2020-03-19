@@ -7,35 +7,25 @@ export default {
         userProfile: {},
     },
     actions: {
-        clearData: ({
-            commit
-        }) => {
+        clearData: ({ commit }) => {
             commit('SET_CURRENT_USER', null)
             commit('SET_USER_PROFILE', {})
         },
-        fetchUserProfile: ({
-            commit,
-            state
-        }) => {
+        fetchUserProfile: ({ commit, state }) => {
             fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
+                localStorage.setItem("uid", state.currentUser.uid);
                 commit('SET_USER_PROFILE', res.data())
             }).catch(err => {
                 console.log(err)
             })
         },
-        setCurrentUser: ({
-            commit
-        }, user) => {
+        setCurrentUser: ({ commit}, user) => {
             commit('SET_CURRENT_USER', user);
         },
-        setUserProfile: ({
-            commit
-        }, user) => {
+        setUserProfile: ({ commit }, user) => {
             commit('SET_USER_PROFILE', user)
         },
-        setUsers: ({
-            commit
-        }, users) => {
+        setUsers: ({ commit }, users) => {
             commit('SET_USERS', users)
         }
     },

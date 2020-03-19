@@ -1,3 +1,5 @@
+const fb = require('../../fireBaseConfig');
+
 export default {
     namespaced: true,
     state:{
@@ -6,42 +8,90 @@ export default {
         product:null
     },
     actions:{
+        clearCart:({ commit})=>{
+            localStorage.removeItem('uid');
+            commit('UPDATE_CART', [])
+        },
         getProducts: ({commit}, products) => {
             commit('UPDATE_PRODUCTS', products)
         },
         getProduct: ({commit}, product) => {
             commit('UPDATE_PRODUCT_DETAILS', product)
         },
-        addToCart: ({commit}, product) => {
-           // const cart = [...state.cart, product];
-           commit('ADD_ITEM_TO_CART', {id: product.id, qtyType:product.qtyType, qty:product.quantity});
+        addToCart: ({rootState, commit, state}, item) => {  
+            let record = state.cart.find(p => p.id === item.id)
+                if (!record) {
+                    item.quantity = 1;
+                    record = item;
+                } else if(item.qtyType == 'minus'){
+                    record.quantity--;
+                }else if(item.qtyType == 'input'){
+                    if(item.quantity =='0'){
+                        record.quantity
+                    }else{
+                        record.quantity = item.quantity
+                    }
+                }  else {
+                    record.quantity++;
+                }
+
+            record.userId = rootState.users.currentUser.uid;
+            ////
+            let tempCart = [];
+            fb.cartsCollection.where("userId", "==", rootState.users.currentUser.uid).get().then(docs => {
+                docs.forEach(doc => {
+                    tempCart.push({ id: doc.id, ...doc.data() });
+                });
+
+                const findItem =  tempCart.find(p => p.id === record.id);
+
+                if(!findItem){
+                    fb.cartsCollection.add(record).then(() =>{
+                        console.log("Added to cart")
+                     }).catch(function(error) {
+                        console.error("Error adding to cart: ", error);
+                    });
+                } else{
+                        let query = fb.cartsCollection.where('id', '==', item.id).where('userId', '==',  rootState.users.currentUser.uid);
+                        query.get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            doc.ref.update({ quantity: findItem.quantity + 1 });
+                        });
+                     });
+                    
+                }
+            });
+            ////
+           commit('ADD_ITEM_TO_CART', record);
         },
-        removeFromCart: ({commit}, product) => {
+        removeFromCart: ({rootState, commit}, product) => {
+            let query = fb.cartsCollection.where('id', '==', product.id).where('userId', '==',  rootState.users.currentUser.uid);
+                query.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    doc.ref.delete();
+                });
+            });
             commit('REMOVE_ITEM_FROM_CART', { id:product.id });
-        }
+        },
+        updateCart:({commit }, items) => {
+            commit('UPDATE_CART', items);
+        }     
     },
     mutations:{
         UPDATE_PRODUCTS: (state, products) =>{
             state.products = products;
         },
-        UPDATE_PRODUCT_DETAILS:(state, product) =>{
+         UPDATE_PRODUCT_DETAILS:(state, product) =>{
             state.product = product;
         },
-        ADD_ITEM_TO_CART: (state, {id, qtyType, qty}) => {
-            const record = state.cart.find(p => p.id === id)
-            if (!record) {
-                state.cart.push({ id,quantity: 1 })
-              } else if(qtyType == 'minus'){
-                record.quantity--;
-              }else if(qtyType == 'input'){
-                  if(qty =='0'){
-                    record.quantity
-                  }else{
-                    record.quantity = qty
-                  }
-              }  else {
-                record.quantity++;
-              }
+        UPDATE_CART: (state, items) =>{
+                state.cart = items;
+        },
+        ADD_ITEM_TO_CART: (state, cart) => {
+             const record = state.cart.find(p => p.id === cart.id)
+             if (!record) {
+                state.cart.push(cart);
+             }            
         },
         REMOVE_ITEM_FROM_CART: (state, {id}) => {
             const remove = state.cart.filter(p => p.id !==id);
@@ -51,17 +101,7 @@ export default {
     getters:{
         getAllProducts: state => state.products,
         getNumberOfProducts: state => (state.products) ? state.products.length : 0,
-        cartProducts: state => {
-            return state.cart.map(({ id, quantity }) => {
-                const product = state.products.find(p => p.id === id)    
-                return {
-                    id:product.id,
-                    name: product.name,
-                    price: product.price,
-                    quantity
-                }
-            });
-        },
+        cartProducts: state => state.cart,
         cartCount: state => state.cart.length,
         getProductDetails: state => state.product
     }

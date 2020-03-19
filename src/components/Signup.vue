@@ -162,4 +162,7 @@ export default {
     .is-invalid {
     border-color: #dc3545;
     }
+    #settings .extras {
+    margin-top: 25px;
+    }
 </style>

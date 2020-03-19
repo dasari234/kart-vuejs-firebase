@@ -16,6 +16,7 @@
         <div v-if="submitted && !$v.loginForm.email.required" class="invalid-feedback">
           <span v-if="!$v.loginForm.email.required">Email is required</span>
         </div>
+        
         <label for="password1">Password</label>
         <input
           v-model.trim="loginForm.password"
@@ -27,6 +28,7 @@
         <div v-if="submitted && !$v.loginForm.password.required" class="invalid-feedback">
           <span v-if="!$v.loginForm.password.required">Password is required</span>
         </div>
+
         <button class="button" :disabled="isPerformingRequest">
           <span v-if="!isPerformingRequest">Log In</span>
           <div class="dot-pulse" v-if="isPerformingRequest"></div>
@@ -66,11 +68,10 @@ export default {
   created() {
     fb.auth.onAuthStateChanged(userAuth => {
       if (userAuth) {
-        console.log("You are already signed in.");
-        fb.auth.currentUser.getIdTokenResult().then(user => {
-          console.log(user)
-          this.$router.push("/dashboard");
-        });
+        // fb.auth.currentUser.getIdTokenResult().then(user => {
+        // console.log(user)
+         this.$router.push({path: '/'});
+        //});
       }
     });
   },
@@ -91,7 +92,6 @@ export default {
         this.isPerformingRequest = false;
         this.setCurrentUser(user);
         this.fetchUserProfile();
-        this.$router.push("/dashboard");
       } catch (error) {
         console.log(error);
         this.isPerformingRequest = false;
@@ -109,5 +109,11 @@ export default {
 <style lang='scss' scoped>
 .is-invalid {
   border-color: #dc3545;
+}
+#settings .col1 {
+    max-width: 400px;
+}
+.person-icon svg{
+  margin-top: -25px;
 }
 </style>

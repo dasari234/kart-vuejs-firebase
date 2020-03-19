@@ -301,18 +301,17 @@ header {
 
 // settings
 #settings {
-    padding: 1rem 0;
-
     .col1 {
-        max-width: 600px;
+        max-width: 500px;
         margin: 5vh auto 0;
         background: $white;
         padding: 1rem;
+        border-radius: 6px;
     }
     .person-icon{
         text-align: center;
         svg {
-            font-size: 10rem;
+            font-size: 7rem;
             color: #30A0EE;
         }
     }

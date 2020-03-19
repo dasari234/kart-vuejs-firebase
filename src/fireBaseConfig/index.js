@@ -26,13 +26,14 @@ db.settings(settings)
 
 // firebase collections
 const usersCollection = db.collection('users');
-
 const productsCollection = db.collection('products');
+const cartsCollection = db.collection('carts');
 
 export {
     db,
     auth,
     currentUser,
     usersCollection,
-    productsCollection
+    productsCollection,
+    cartsCollection
 }

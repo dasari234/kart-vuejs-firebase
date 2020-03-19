@@ -21,7 +21,7 @@ let router = new Router({
     routes: [
         {
             path: '',
-            name:'/',
+            name:'home',
             component:Home,
         },
         {

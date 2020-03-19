@@ -1,6 +1,7 @@
 <template>
   <div class="cart app-container">
-    <div class="row">
+    <card-loader :loopCount="1" v-if="isLoading" />
+    <div v-cloak class="row" v-if="!isLoading">
       <div class="col-md-8">
         <div class="card mb-4 shadow-sm my-cart">
           <div class="title" v-if="products.length > 0">My Cart ({{count}})</div>
@@ -58,7 +59,11 @@
                 </tr>-->
                 <tr>
                   <td>
-                    <a href="javascript:void(0)" class="view-details-link" v-on:click="gotoProducts()">
+                    <a
+                      href="javascript:void(0)"
+                      class="view-details-link"
+                      v-on:click="gotoProducts()"
+                    >
                       <span>Continue Shopping</span>
                     </a>
                   </td>
@@ -96,12 +101,16 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import CardLoader from "@/components/shared/CardLoader";
+//const fb = require("../../fireBaseConfig");
 
 export default {
   name: "cart",
+  components: { CardLoader },
   data() {
     return {
-      qty: ""
+      qty: "",
+      isLoading: false
     };
   },
   computed: {
@@ -249,6 +258,7 @@ export default {
   margin-bottom: 0rem;
 }
 .bi-trash {
+  margin-top: 5px;
   font-size: 20px;
   color: rgb(22, 22, 22);
   &:hover {

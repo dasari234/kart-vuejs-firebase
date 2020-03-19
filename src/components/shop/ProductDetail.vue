@@ -51,15 +51,22 @@ export default {
   methods: {
     ...mapActions("shops", ["addToCart", "getProduct"]),
     async getDetails() {
-      this.isLoading = true;
-      await fb.productsCollection
-        .doc(this.$route.params.id)
-        .get()
-        .then(querySnapshot => {
-          const product = { id: querySnapshot.id, ...querySnapshot.data() };
-          this.getProduct(product);
-          this.isLoading = false;
-        });
+      try {
+        this.isLoading = true;
+        await fb.productsCollection
+          .doc(this.$route.params.id)
+          .get()
+          .then(querySnapshot => {
+            const product = { id: querySnapshot.id, ...querySnapshot.data() };
+            this.getProduct(product);
+            this.isLoading = false;
+          })
+          .catch(function(error) {
+            console.error("Error getting details: ", error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
     addItemToCart(product) {
       this.addToCart(product);

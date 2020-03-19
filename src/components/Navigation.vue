@@ -60,7 +60,7 @@ export default {
       userProfile: "getUserProfile",
       currentUser: "getCurrentUser"
     }),
-    ...mapGetters("shops", ["cartCount"])
+    ...mapGetters("shops", { cartCount: "cartCount" })
   },
   created() {
     fb.auth.onAuthStateChanged(user => {
@@ -69,6 +69,7 @@ export default {
         this.fetchUserProfile();
         fb.usersCollection.doc(user.uid).onSnapshot(doc => {
           this.setUserProfile(doc.data());
+          this.getCartItems();
         });
       }
     });
@@ -80,11 +81,14 @@ export default {
       "setCurrentUser",
       "fetchUserProfile"
     ]),
+    ...mapActions("shops", ["clearCart", "updateCart"]),
     async logout() {
       try {
-        fb.auth.signOut();
-        this.clearData();
-        this.$router.push("/login");
+        await fb.auth.signOut().then(() => {
+          this.$router.push("/login");
+          this.clearData();
+          this.clearCart();
+        });
       } catch (error) {
         this.$notify({
           group: "notify",
@@ -92,6 +96,26 @@ export default {
           title: "",
           text: `${error.message}`
         });
+      }
+    },
+    async getCartItems() {
+      try {
+        const uid = localStorage.getItem("uid");
+        const cart = [];
+        await fb.cartsCollection
+          .where("userId", "==", uid)
+          .get()
+          .then(docs => {
+            docs.forEach(doc => {
+              cart.push({ id: doc.id, ...doc.data() });
+            });
+            this.updateCart(cart);
+          })
+          .catch(function(error) {
+            console.error("Error getting cart: ", error);
+          });
+      } catch (error) {
+        console.log(error);
       }
     }
   }

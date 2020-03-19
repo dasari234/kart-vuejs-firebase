@@ -32,15 +32,24 @@ export default {
   methods: {
     ...mapActions("shops", ["getProducts"]),
     async getAll() {
-      this.isLoading = true;
-      const products = [];
-      await fb.productsCollection.get().then(querySnapshot => {
-        querySnapshot.docs.forEach(doc => {
-          products.push({ id: doc.id, ...doc.data() });
-        });
-      });
-      this.getProducts(products);
-      this.isLoading = false;
+      try {
+        this.isLoading = true;
+        const products = [];
+        await fb.productsCollection
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+              products.push({ id: doc.id, ...doc.data() });
+            });
+          })
+          .catch(function(error) {
+            console.error("Error getting products: ", error);
+          });
+        this.getProducts(products);
+        this.isLoading = false;
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
