@@ -21,10 +21,15 @@
             <li>
               <router-link to="/profile" class="dropdown-item">Profile</router-link>
             </li>
+            <li>
+              <router-link to="/myorders" class="dropdown-item">Orders</router-link>
+            </li>
             <li v-if="userProfile.role=='admin'">
               <router-link to="/admin" class="dropdown-item">Admin</router-link>
             </li>
-            <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+            <li>
+              <a href="javascript:void(0)" class="dropdown-item" @click="logout">Logout</a>
+            </li>
           </b-nav-item-dropdown>
           <li>
             <router-link to="/cart" class="nav-link">
@@ -90,12 +95,7 @@ export default {
           this.clearCart();
         });
       } catch (error) {
-        this.$notify({
-          group: "notify",
-          type: "error",
-          title: "",
-          text: `${error.message}`
-        });
+        console.log(error);
       }
     },
     async getCartItems() {
@@ -141,5 +141,14 @@ header section .col1 {
 }
 .dropdown-toggle span {
   text-transform: capitalize;
+}
+
+.dropdown {
+   .dropdown-menu {
+    li {
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 </style>

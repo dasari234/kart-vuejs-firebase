@@ -47,20 +47,9 @@ export default {
         this.isPerformingRequest = false;
         this.firstName = "";
         this.lastName = "";
-
-        this.$notify({
-          group: "notify",
-          type: "success",
-          title: "",
-          text: "Profile updated successfully."
-        });
+        this.$toast.success('Profile updated successfully.');
       } catch (error) {
-        this.$notify({
-          group: "notify",
-          type: "error",
-          title: "",
-          text: `${error.message}`
-        });
+      console.log(error)
       }
     }
   }

@@ -143,16 +143,16 @@ export default {
         await fb.usersCollection.doc(uid).set({
           firstName: this.signupForm.firstName,
           lastName: this.signupForm.lastName,
-          role:''
+          role:'',
+          address:[]
         });
         this.performingRequest = false;
-        this.$notify({ group: 'notify', type: 'success', title: '', text: 'User created successfully.' });
+        this.$toast.success('User created successfully.');
         this.fetchUserProfile();
         this.$router.push("/dashboard");
       } catch (error) {
         console.log(error);
         this.performingRequest = false;
-        this.$notify({ group: 'notify', type: 'error', title: '', text: `${error.message}`});
       }
     }
   }

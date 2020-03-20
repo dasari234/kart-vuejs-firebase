@@ -4,7 +4,7 @@
       <div class="person-icon">
         <b-icon-person-fill></b-icon-person-fill>
       </div>
-      <form @submit.prevent="login">
+      <form @submit.prevent="login" class="d-flex flex-column">
         <label for="email1">Email</label>
         <input
           v-model.trim="loginForm.email"
@@ -34,7 +34,7 @@
           <div class="dot-pulse" v-if="isPerformingRequest"></div>
         </button>
 
-        <div class="extras">
+        <div class="extras d-flex justify-content-between">
           <router-link to="resetpassword">Forgot Password?</router-link>
           <router-link to="signup">Create an Account</router-link>
         </div>
@@ -95,12 +95,6 @@ export default {
       } catch (error) {
         console.log(error);
         this.isPerformingRequest = false;
-        this.$notify({
-          group: "notify",
-          type: "error",
-          title: "",
-          text: `${error.message}`
-        });
       }
     }
   }
@@ -111,7 +105,7 @@ export default {
   border-color: #dc3545;
 }
 #settings .col1 {
-    max-width: 400px;
+    max-width: 350px;
 }
 .person-icon svg{
   margin-top: -25px;

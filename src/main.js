@@ -4,14 +4,15 @@ import router from './router'
 import store from './store';
 const fb = require('./fireBaseConfig');
 import Vuelidate from 'vuelidate';
-import Notifications from 'vue-notification';
-import velocity from 'velocity-animate'
+import VueToast from 'vue-toast-notification';
+
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import 'vue-toast-notification/dist/theme-default.css';
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(Vuelidate);
-Vue.use(Notifications, {velocity});
+Vue.use(VueToast,{position: 'top'});
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

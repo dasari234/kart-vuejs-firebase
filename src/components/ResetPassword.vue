@@ -73,11 +73,10 @@ export default {
         this.isPerformingRequest = false;
         this.isPasswordResetSuccess = true;
         this.passwordForm.email = "";
-        this.$notify({ group: 'notify', type: 'success', title: '', text: 'Reset password link sent successfully.' });
+        this.$toast.success('Reset password link sent successfully.');
       } catch (error) {
         console.log(error.message);
         this.isPerformingRequest = false;
-        this.$notify({ group: 'notify', type: 'error', title: '', text: `${error.message}`});
       }
     }
   }

@@ -88,22 +88,11 @@ export default {
           })
           .then(() => {
             this.isPerformingRequest = false;
-            this.$notify({
-              group: "notify",
-              type: "success",
-              title: "",
-              text: "Product created successfully."
-            });
+            this.$toast.success('Product created successfully.');
           });
       } catch (error) {
         console.log(error.message);
         this.isPerformingRequest = false;
-        this.$notify({
-          group: "notify",
-          type: "error",
-          title: "",
-          text: `${error.message}`
-        });
       }
     }
   }

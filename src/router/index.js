@@ -12,6 +12,8 @@ import Products from '@/components/shop/Products';
 import Cart from '@/components/shop/Cart';
 import ProductDetail from '@/components/shop/ProductDetail';
 import AddProduct from '@/components/shop/AddProduct';
+import MyOrders from '@/components/shop/MyOrders';
+import CartSummary from '@/components/shop/CartSummary';
 import Notfound from '@/components/Notfound';
 
 Vue.use(Router)
@@ -41,6 +43,22 @@ let router = new Router({
 			path: '/profile',
 			name: 'profile',
 			component: Profile,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+			path: '/myorders',
+			name: 'myorders',
+			component: MyOrders,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+			path: '/checkout',
+			name: 'checkout',
+			component: CartSummary,
             meta: {
                 requiresAuth: true
             }

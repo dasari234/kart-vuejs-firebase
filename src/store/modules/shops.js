@@ -5,7 +5,7 @@ export default {
     state:{
         cart:[],
         products:null,
-        product:null
+        product:null,
     },
     actions:{
         clearCart:({ commit})=>{
@@ -55,7 +55,7 @@ export default {
                         let query = fb.cartsCollection.where('id', '==', item.id).where('userId', '==',  rootState.users.currentUser.uid);
                         query.get().then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
-                            doc.ref.update({ quantity: findItem.quantity + 1 });
+                            doc.ref.update({ quantity: record.quantity });
                         });
                      });
                     
@@ -75,7 +75,7 @@ export default {
         },
         updateCart:({commit }, items) => {
             commit('UPDATE_CART', items);
-        }     
+        },     
     },
     mutations:{
         UPDATE_PRODUCTS: (state, products) =>{
@@ -96,13 +96,18 @@ export default {
         REMOVE_ITEM_FROM_CART: (state, {id}) => {
             const remove = state.cart.filter(p => p.id !==id);
             state.cart = remove;
-        }
+        },
     },
     getters:{
         getAllProducts: state => state.products,
         getNumberOfProducts: state => (state.products) ? state.products.length : 0,
         cartProducts: state => state.cart,
         cartCount: state => state.cart.length,
-        getProductDetails: state => state.product
+        getProductDetails: state => state.product,
+        getTotal: state => {
+            return state.cart.reduce((total, p) => {
+                return total + p.price * p.quantity;
+            }, 0);
+        }
     }
 }

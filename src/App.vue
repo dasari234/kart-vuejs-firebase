@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <notifications
-      group="notify"
-      position="top center"
-      animation-type="velocity"
-    />
     <Navigation></Navigation>
     <router-view />
   </div>
