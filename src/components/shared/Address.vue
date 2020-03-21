@@ -2,11 +2,24 @@
   <div class="card-body">
     <card-loader :loopCount="1" v-if="isLoading" />
     <div v-if="!isLoading">
-      <div class="address-container d-flex flex-row" v-for="(a, index) in address" :key="index">
-        <div class="radio-button">
-          <input type="radio" v-model="selectedAddress" v-bind:value="a" />
+      <div
+        class="address-container d-flex flex-row justify-content-between align-items-center"
+        v-for="(a, index) in address"
+        :key="index"
+      >
+        <div class="radio-container d-flex">
+          <input class="radioBox" type="radio" v-model="selectedAddress" v-bind:value="a" />
+          <div class="radio-button"></div>
         </div>
-        <div>{{a.name}}, {{a.areaName}}, {{a.street}}, {{a.city}}, {{a.pinCode}}, {{a.state}}</div>
+        <div
+          class="flex-grow-1"
+        >{{a.name}}, {{a.areaName}}, {{a.street}}, {{a.city}}, {{a.pinCode}}, {{a.state}}</div>
+      </div>
+
+      <div class="continue-container">
+        <button class="chekout-button" v-on:click="onContinueAddress()">
+          <span>CONTINUE</span>
+        </button>
       </div>
 
       <div v-cloak class="d-flex flex-wrap margin-b" v-if="isAddress">
@@ -88,7 +101,7 @@
 
         <div class="button-layout">
           <button class="chekout-button" v-on:click="saveAddress()">
-            <span>SAVE ADDESS</span>
+            <span>SAVE AND CONTINUE</span>
           </button>
         </div>
       </div>
@@ -137,12 +150,13 @@ export default {
           .then(docs => {
             docs.forEach(doc => {
               this.address.push({ id: doc.id, ...doc.data() });
-              this.isLoading = false;
             });
           });
+
+        this.isLoading = false;
         this.selectedAddress = this.address[0];
-        
-        console.log(this.selectedAddress)
+
+        console.log(this.selectedAddress);
       } catch (error) {
         console.log(error);
         this.isLoading = false;
@@ -160,6 +174,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onContinueAddress() {
+      this.$emit("continue-address");
     }
   }
 };
@@ -203,8 +220,40 @@ export default {
     padding: 5px;
     background: #f7f7f7;
   }
-  .radio-button{
-      margin-right: 10px;
+  .radio-container {
+    margin-right: 10px;
+    .radioBox {
+      visibility: hidden;
+      position: absolute;
+    }
+    .radioBox:checked ~ .radio-button {
+      border-color: #2874f0;
+    }
+    .radioBox:checked ~ .radio-button:before {
+      border: 2px hidden;
+      background-color: #2874f0;
+    }
+    .radio-button {
+      display: inline-block;
+      border: 2px solid #979797;
+      border-radius: 100%;
+      height: 16px;
+      width: 16px;
+      position: relative;
+      vertical-align: top;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+    .radio-button:before {
+      content: "";
+      border-radius: 100%;
+      height: 8px;
+      width: 8px;
+      margin: auto;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
   }
 }
 </style>

@@ -4,13 +4,18 @@
       <div class="col-md-8">
         <div class="card mb-4 shadow-sm my-cart">
           <div class="title">Delivery Address</div>
-            <Address/>
+          <Address @continue-address="continueAddress()"></Address>
         </div>
 
         <div class="card mb-4 shadow-sm my-cart">
           <div class="title">Order Summary</div>
           <div class="card-body">
             <CartList></CartList>
+            <div class="continue-container">
+              <button class="chekout-button" v-on:click="continueOrdersummary()">
+                <span>CONTINUE</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -74,6 +79,12 @@ export default {
         console.log(item);
         this.removeFromCart(item);
       });
+    },
+    continueAddress() {
+      console.log("Address Clicked!");
+    },
+    continueOrdersummary() {
+      console.log("summury Clicked!");
     }
   }
 };
@@ -117,5 +128,12 @@ export default {
 .footer-section {
   border-top: 1px solid #dee2e6;
   padding: 15px 10px;
+}
+</style>
+
+<style lang="scss">
+.continue-container {
+  text-align: right;
+  margin-bottom: 10px;
 }
 </style>

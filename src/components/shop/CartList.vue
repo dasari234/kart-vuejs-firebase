@@ -43,6 +43,7 @@
         </tr>
       </tbody>
     </table>
+
   </div>
 </template>
 
@@ -141,7 +142,8 @@ export default {
   }
 }
 .table {
-  margin-bottom: 0rem;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
 }
 .bi-trash {
   margin-top: 5px;
