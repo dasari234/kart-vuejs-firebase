@@ -8,10 +8,15 @@
     >-->
 
     <div class="card-body">
+      <HeartIcon></HeartIcon>
       <h6 class="title" v-on:click="addItemToCart(item)">{{item.name}}</h6>
       <p class="description">{{item.description}}</p>
       <div class="d-flex justify-content-between align-items-center">
-        <a href="javascript:void(0)" class="view-details-link" v-on:click="gotoProductDetails(item)">View</a>
+        <a
+          href="javascript:void(0)"
+          class="view-details-link"
+          v-on:click="gotoProductDetails(item)"
+        >View</a>
         <small class="footer-icons">
           <button class="add-to-cart-button" v-on:click="addItemToCart(item)">
             <svg
@@ -30,7 +35,6 @@
             <span>ADD TO CART</span>
           </button>
         </small>
-        
       </div>
     </div>
   </div>
@@ -38,13 +42,24 @@
 
 <script>
 import { mapActions } from "vuex";
+const fb = require("../../fireBaseConfig");
+import HeartIcon from "@/components/shared/HeartIcon";
 export default {
   name: "cardTemplate",
+  components: { HeartIcon },
   props: ["item"],
   methods: {
     ...mapActions("shops", ["addToCart"]),
     addItemToCart(product) {
-      this.addToCart(product);
+      fb.auth.onAuthStateChanged(user => {
+        if (!user) {
+          this.$router.push({
+            name: "login"
+          });
+        } else {
+          this.addToCart(product);
+        }
+      });
     },
     gotoProductDetails(item) {
       this.$router.push({
@@ -58,23 +73,22 @@ export default {
 <style lang='scss' scoped>
 .card {
   cursor: pointer;
-  .title{
-    text-transform:capitalize;
+  .title {
+    text-transform: capitalize;
   }
   &:hover {
     .title {
       color: #30a0ee;
-      
     }
   }
   flex: 1 0 auto;
   .card-body {
     display: flex;
     flex-direction: column;
-    .view-details-link{
+    .view-details-link {
       text-decoration: none;
-      &:hover{
-        color:#0056b3;
+      &:hover {
+        color: #0056b3;
       }
     }
     p {

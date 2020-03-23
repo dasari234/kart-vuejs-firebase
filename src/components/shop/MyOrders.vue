@@ -248,4 +248,7 @@ export default {
     color: #0056b3;
   }
 }
+.cart{
+  margin-left: 10px;
+}
 </style>

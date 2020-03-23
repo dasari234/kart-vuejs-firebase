@@ -20,5 +20,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.app-container{
+  margin-left: 10px;
+}
 </style>

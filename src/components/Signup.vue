@@ -3,62 +3,52 @@
     <section>
       <div class="col1">
         <!-- -->
-        <form @submit.prevent>
+
+        <v-form @submit.prevent="signup" ref="form" v-model="valid" :lazy-validation="lazy">
           <h1>Get Started</h1>
-            <!-- -->
-          <label for="name">First Name</label>
-          <input
+          <!-- -->
+          <v-text-field
             v-model.trim="signupForm.firstName"
-            type="text"
-            placeholder="First Name"
-            id="firstName"
-            :class="{ 'is-invalid': submitted && $v.signupForm.firstName.$error }"
-          />
-          <div v-if="submitted && !$v.signupForm.firstName.required" class="invalid-feedback">
-            <span v-if="!$v.signupForm.firstName.required">First name is required</span>
-          </div>
-            <!-- -->
-          <label for="title">Last Name</label>
-          <input
+            :error-messages="firstNameErrors"
+            label="First Name"
+            required
+            @input="$v.signupForm.firstName.$touch()"
+            @blur="$v.signupForm.firstName.$touch()"
+          ></v-text-field>
+
+          <v-text-field
             v-model.trim="signupForm.lastName"
-            type="text"
-            placeholder="Last Name"
-            id="lastName"
-            :class="{ 'is-invalid': submitted && $v.signupForm.lastName.$error }"
-          />
-          <div v-if="submitted && !$v.signupForm.lastName.required" class="invalid-feedback">
-            <span v-if="!$v.signupForm.lastName.required">Last name is required</span>
-          </div>
-            <!-- -->
-          <label for="email">Email</label>
-          <input
+            :error-messages="lastNameErrors"
+            label="Last Name"
+            required
+            @input="$v.signupForm.lastName.$touch()"
+            @blur="$v.signupForm.lastName.$touch()"
+          ></v-text-field>
+          <!-- -->
+
+          <v-text-field
             v-model.trim="signupForm.email"
-            type="text"
-            placeholder="you@email.com"
-            id="email"
-            :class="{ 'is-invalid': submitted && $v.signupForm.email.$error }"
-          />
-          <div v-if="submitted && !$v.signupForm.email.required" class="invalid-feedback">
-            <span v-if="!$v.signupForm.email.required">Email is required</span>
-            <span v-if="!$v.signupForm.email.email">Email is invalid</span>
-          </div>
-            <!-- -->
-          <label for="password">Password</label>
-          <input
-            v-model.trim="signupForm.password"
+            :error-messages="emailErrors"
+            label="Email"
+            required
+            @input="$v.signupForm.email.$touch()"
+            @blur="$v.signupForm.email.$touch()"
+          ></v-text-field>
+
+          <!-- -->
+
+          <v-text-field
             type="password"
-            placeholder="min 6 characters"
-            id="password"
-            :class="{ 'is-invalid': submitted && $v.signupForm.password.$error }"
-          />
-          <div v-if="submitted && !$v.signupForm.password.required" class="invalid-feedback">
-            <span v-if="!$v.signupForm.password.required">Password is required</span>
-            <span v-if="!$v.signupForm.password.minLength">Password must be at least 6 characters</span>
-          </div>
+            v-model.trim="signupForm.password"
+            :error-messages="passwordErrors"
+            label="Password"
+            required
+            @input="$v.signupForm.password.$touch()"
+            @blur="$v.signupForm.password.$touch()"
+          ></v-text-field>
 
-
-            <!-- -->
-          <label for="confirmPassword">Confirm Password</label>
+          <!-- -->
+          <!-- <label for="confirmPassword">Confirm Password</label>
           <input
             v-model.trim="signupForm.confirmPassword"
             type="password"
@@ -68,10 +58,21 @@
           />
           <div v-if="submitted && !$v.signupForm.confirmPassword.required" class="invalid-feedback">
             <span v-if="!$v.signupForm.confirmPassword.required">Password is required</span>
-            <span v-if="!$v.signupForm.confirmPassword.minLength">Password must be at least 6 characters</span>
-          </div>
-            <!-- -->
-          <button @click="signup" class="button">
+            <span
+              v-if="!$v.signupForm.confirmPassword.minLength"
+            >Password must be at least 6 characters</span>
+          </div>-->
+          <v-text-field
+            type="password"
+            v-model.trim="signupForm.confirmPassword"
+            :error-messages="confirmPasswordErrors"
+            label="Confirm Password"
+            required
+            @input="$v.signupForm.confirmPassword.$touch()"
+            @blur="$v.signupForm.confirmPassword.$touch()"
+          ></v-text-field>
+          <!-- -->
+          <button class="button" :disabled="isPerformingRequest">
             <span v-if="!isPerformingRequest">Sign Up</span>
             <div class="dot-pulse" v-if="isPerformingRequest"></div>
           </button>
@@ -79,7 +80,7 @@
           <div class="extras">
             <router-link to="login">Back to login</router-link>
           </div>
-        </form>
+        </v-form>
       </div>
     </section>
   </div>
@@ -88,11 +89,15 @@
 <script>
 const fb = require("../fireBaseConfig");
 import { mapActions } from "vuex";
+
 import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
 export default {
+
   data() {
     return {
+      lazy: false,
+      valid: true,
       signupForm: {
         firstName: "",
         LastName: "",
@@ -110,11 +115,58 @@ export default {
       lastName: { required },
       email: { required, email },
       password: { required, minLength: minLength(6) },
-      confirmPassword: { required, sameAsPassword: sameAs('password') }
+      confirmPassword: {
+        required,
+        sameAsPassword: sameAs("password"),
+        minLength: minLength(6)
+      }
+    }
+  },
+  computed: {
+    firstNameErrors() {
+      const errors = [];
+      if (!this.$v.signupForm.firstName.$dirty) return errors;
+      !this.$v.signupForm.firstName.required &&
+        errors.push("First Name is required");
+      return errors;
+    },
+    lastNameErrors() {
+      const errors = [];
+      if (!this.$v.signupForm.lastName.$dirty) return errors;
+      !this.$v.signupForm.lastName.required &&
+        errors.push("Last Name is required");
+      return errors;
+    },
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.signupForm.email.$dirty) return errors;
+      !this.$v.signupForm.email.email && errors.push("Must be valid e-mail");
+      !this.$v.signupForm.email.required && errors.push("E-mail is required");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.signupForm.password.$dirty) return errors;
+      !this.$v.signupForm.password.required &&
+        errors.push("Password is required");
+      !this.$v.signupForm.password.minLength &&
+        errors.push("Password must be at least 6 characters");
+      return errors;
+    },
+    confirmPasswordErrors() {
+      const errors = [];
+      if (!this.$v.signupForm.confirmPassword.$dirty) return errors;
+      !this.$v.signupForm.confirmPassword.required &&
+        errors.push("Password is required");
+      !this.$v.signupForm.confirmPassword.minLength &&
+        errors.push("Password must be at least 6 characters");
+      !this.$v.signupForm.confirmPassword.sameAsPassword &&
+        errors.push("Passwords must be identical");
+      return errors;
     }
   },
   methods: {
-    ...mapActions('users', ["fetchUserProfile", "setCurrentUser"]),
+    ...mapActions("users", ["fetchUserProfile", "setCurrentUser"]),
     async signup() {
       this.submitted = true;
       this.$v.$touch();
@@ -128,13 +180,18 @@ export default {
           this.signupForm.password
         );
         this.isPerformingRequest = false;
-       this.setCurrentUser(user);
+        this.setCurrentUser(user);
         //creste user collection
         this.createUser(user.uid);
       } catch (error) {
         console.log(error.message);
         this.isPerformingRequest = false;
-        this.$notify({ group: 'notify', type: 'error', title: '', text: `${error.message}`});
+        this.$notify({
+          group: "notify",
+          type: "error",
+          title: "",
+          text: `${error.message}`
+        });
       }
     },
     async createUser(uid) {
@@ -143,12 +200,12 @@ export default {
         await fb.usersCollection.doc(uid).set({
           firstName: this.signupForm.firstName,
           lastName: this.signupForm.lastName,
-          role:'',
-          address:[]
+          role: "",
+          address: []
         });
         this.performingRequest = false;
-        this.$toast.success('User created successfully.');
-        this.fetchUserProfile();
+        this.$toast.success("User created successfully.");
+        this.fetchUserProfile(uid);
         this.$router.push("/dashboard");
       } catch (error) {
         console.log(error);
@@ -159,10 +216,10 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-    .is-invalid {
-    border-color: #dc3545;
-    }
-    #settings .extras {
-    margin-top: 25px;
-    }
+.is-invalid {
+  border-color: #dc3545;
+}
+#settings .extras {
+  margin-top: 25px;
+}
 </style>

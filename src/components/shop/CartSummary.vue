@@ -131,9 +131,12 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .continue-container {
   text-align: right;
   margin-bottom: 10px;
+}
+.app-container {
+  margin: 0px 10px;
 }
 </style>

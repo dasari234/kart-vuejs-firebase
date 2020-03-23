@@ -11,10 +11,10 @@ export default {
             commit('SET_CURRENT_USER', null)
             commit('SET_USER_PROFILE', {})
         },
-        fetchUserProfile: ({ commit, state }) => {
-            fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
-                localStorage.setItem("uid", state.currentUser.uid);
-                commit('SET_USER_PROFILE', res.data())
+        fetchUserProfile: ({ commit }, user) => {
+            localStorage.setItem("uid", user);
+            fb.usersCollection.doc(user).get().then(res => {
+                 commit('SET_USER_PROFILE', res.data())
             }).catch(err => {
                 console.log(err)
             })

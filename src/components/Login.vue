@@ -2,43 +2,38 @@
   <section id="settings">
     <div class="col1">
       <div class="person-icon">
-        <b-icon-person-fill></b-icon-person-fill>
+        <i class="fas fa-user-circle"></i>
       </div>
-      <form @submit.prevent="login" class="d-flex flex-column">
-        <label for="email1">Email</label>
-        <input
+      <v-form @submit.prevent="login" ref="form" v-model="valid" :lazy-validation="lazy">
+        <v-text-field
           v-model.trim="loginForm.email"
-          type="text"
-          placeholder="you@email.com"
-          id="email1"
-          :class="{ 'is-invalid': submitted && $v.loginForm.email.$error }"
-        />
-        <div v-if="submitted && !$v.loginForm.email.required" class="invalid-feedback">
-          <span v-if="!$v.loginForm.email.required">Email is required</span>
-        </div>
-        
-        <label for="password1">Password</label>
-        <input
-          v-model.trim="loginForm.password"
+          :error-messages="emailErrors"
+          label="Email"
+          required
+          @input="$v.loginForm.email.$touch()"
+          @blur="$v.loginForm.email.$touch()"
+        ></v-text-field>
+
+        <v-text-field
           type="password"
-          placeholder="******"
-          id="password1"
-          :class="{ 'is-invalid': submitted && $v.loginForm.password.$error }"
-        />
-        <div v-if="submitted && !$v.loginForm.password.required" class="invalid-feedback">
-          <span v-if="!$v.loginForm.password.required">Password is required</span>
-        </div>
+          v-model.trim="loginForm.password"
+          :error-messages="passwordErrors"
+          label="Password"
+          required
+          @input="$v.loginForm.password.$touch()"
+          @blur="$v.loginForm.password.$touch()"
+        ></v-text-field>
 
         <button class="button" :disabled="isPerformingRequest">
           <span v-if="!isPerformingRequest">Log In</span>
           <div class="dot-pulse" v-if="isPerformingRequest"></div>
         </button>
 
-        <div class="extras d-flex justify-content-between">
+        <div class="extras d-flex flex-column justify-content-between">
           <router-link to="resetpassword">Forgot Password?</router-link>
           <router-link to="signup">Create an Account</router-link>
         </div>
-      </form>
+      </v-form>
     </div>
   </section>
 </template>
@@ -46,11 +41,15 @@
 <script>
 const fb = require("../fireBaseConfig");
 import { mapActions } from "vuex";
+import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
 
 export default {
+  mixins: [validationMixin],
   data() {
     return {
+      lazy: false,
+      valid: true,
       loginForm: {
         email: "",
         password: ""
@@ -65,12 +64,28 @@ export default {
       password: { required, minLength: minLength(6) }
     }
   },
+  computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.loginForm.email.$dirty) return errors;
+      !this.$v.loginForm.email.email && errors.push("Must be valid e-mail");
+      !this.$v.loginForm.email.required && errors.push("E-mail is required");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.loginForm.password.$dirty) return errors;
+      !this.$v.loginForm.password.required &&
+        errors.push("Password is required");
+      return errors;
+    }
+  },
   created() {
     fb.auth.onAuthStateChanged(userAuth => {
       if (userAuth) {
         // fb.auth.currentUser.getIdTokenResult().then(user => {
         // console.log(user)
-         this.$router.push({path: '/'});
+        this.$router.push({ path: "/" });
         //});
       }
     });
@@ -91,7 +106,7 @@ export default {
         );
         this.isPerformingRequest = false;
         this.setCurrentUser(user);
-        this.fetchUserProfile();
+        this.fetchUserProfile(user.uid);
       } catch (error) {
         console.log(error);
         this.isPerformingRequest = false;
@@ -101,13 +116,31 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.is-invalid {
-  border-color: #dc3545;
+.fa-user-circle {
+  font-size: 100px;
+  color: #30a0ee;
 }
+.error--text {
+  color: #ff5252 !important;
+  caret-color: #ff5252 !important;
+}
+.theme--light.v-messages {
+  color: #ff5252 !important;
+}
+.theme--light.v-label {
+  color: #ff5252 !important;
+}
+
+.v-input > .v-input__control > .v-input__slot {
+  border: 1px solid #e6ecf0;
+  padding: 10px;
+  border-radius: 3px;
+}
+
 #settings .col1 {
-    max-width: 350px;
+  max-width: 350px;
 }
-.person-icon svg{
+.person-icon svg {
   margin-top: -25px;
 }
 </style>

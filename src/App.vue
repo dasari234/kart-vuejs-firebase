@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <Navigation></Navigation>
-    <router-view />
+    <v-app>
+      <Navigation :style="styleObject"></Navigation>
+      <router-view />
+    </v-app>
   </div>
 </template>
 
@@ -9,11 +11,36 @@
 import Navigation from "@/components/Navigation.vue";
 
 export default {
-  components: { Navigation }, 
+  components: { Navigation },
+  data: () => ({
+    scrollY: null,
+    styleObject: null
+  }),
+  mounted() {
+    window.addEventListener("scroll", () => {
+      this.scrollY = Math.round(window.scrollY);
+    });
+  },
+  watch: {
+    scrollY() {
+      if (this.scrollY > 0) {
+        this.styleObject = {
+          position: "fixed",
+          width: "100%"
+        };
+      } else {
+        this.styleObject = {
+          position: "relative",
+          width: "100%"
+        };
+      }
+    }
+  }
 };
 </script>
 <style lang='scss'>
-.app-container{
-    margin: 10px 20px;
+.theme--light.v-application {
+  background: #e6ecf0 !important;
+  color: rgba(0, 0, 0, 0.87);
 }
 </style>

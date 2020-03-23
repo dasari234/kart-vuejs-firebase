@@ -16,7 +16,7 @@
         >{{a.name}}, {{a.areaName}}, {{a.street}}, {{a.city}}, {{a.pinCode}}, {{a.state}}</div>
       </div>
 
-      <div class="continue-container">
+      <div class="continue-container" v-if="!isAddress">
         <button class="chekout-button" v-on:click="onContinueAddress()">
           <span>CONTINUE</span>
         </button>
@@ -156,7 +156,6 @@ export default {
         this.isLoading = false;
         this.selectedAddress = this.address[0];
 
-        console.log(this.selectedAddress);
       } catch (error) {
         console.log(error);
         this.isLoading = false;
@@ -184,6 +183,10 @@ export default {
 
 <style lang="scss" scoped>
 .card-body {
+  .continue-container{
+    margin-bottom: 10px;
+    text-align: right;
+  }
   .button-layout {
     width: 600px;
     margin-top: 10px;

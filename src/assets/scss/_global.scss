@@ -10,11 +10,6 @@ $medium: #657786;
 $dark: #34495E;
 $white: #fff;
 // resets
-body {
-	margin: 0;
-	color: $dark;
-	background: #E6ECF0;
-}
 
 html {
 	line-height: 1.15;
@@ -22,7 +17,7 @@ html {
 }
 
 * {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	box-sizing: border-box;
 	transition: 0.15s;
 
@@ -79,7 +74,6 @@ a {
 // globals
 section {
 	display: flex;
-	max-width: 1200px;
 	margin: 0 auto;
 
 	@media screen and (max-width: 742px) {
@@ -177,30 +171,7 @@ form {
 		margin-bottom: 0.5rem;
 	}
 
-	input {
-		display: block;
-		width: 100%;
-		margin-bottom: 1rem;
-		font-size: 16px;
-		padding: 10px;
-		outline: 0;
-		border: 1px solid #e6ecf0;
-		border-radius: 3px;
-
-		&:focus {
-			box-shadow: 0 0 5px 0 rgba($dark, 0.2);
-		}
-	}
-
-    textarea {
-        resize: none;
-        border: 1px solid #e6ecf0;
-        outline: 0;
-        height: 100px;
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-    }
+	
 }
 // transitions
 .fade-enter-active {

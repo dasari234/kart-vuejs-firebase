@@ -37,7 +37,7 @@
           <td>₹{{ item.price }}</td>
           <td>
             <a href="javascript:void(0)" v-on:click="removeItemFromCart(item)">
-              <b-icon-trash></b-icon-trash>
+              <i class="fas fa-trash-alt"></i>
             </a>
           </td>
         </tr>
@@ -145,10 +145,10 @@ export default {
   margin-bottom: 10px;
   border-bottom: 1px solid #dee2e6;
 }
-.bi-trash {
+.fa-trash-alt {
   margin-top: 5px;
-  font-size: 20px;
-  color: rgb(22, 22, 22);
+  font-size: 16px;
+  color: #b5b3b3;
   &:hover {
     color: #0056b3;
   }
