@@ -8,7 +8,7 @@
     >-->
 
     <div class="card-body">
-      <HeartIcon></HeartIcon>
+      <HeartIcon :item="item"></HeartIcon>
       <h6 class="title" v-on:click="addItemToCart(item)">{{item.name}}</h6>
       <p class="description">{{item.description}}</p>
       <div class="d-flex justify-content-between align-items-center">

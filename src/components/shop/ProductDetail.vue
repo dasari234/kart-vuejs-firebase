@@ -5,7 +5,7 @@
       <div class="col-md-8">
       <div class="card mb-4">
         <div class="card-body">
-          <HeartIcon></HeartIcon>
+          <HeartIcon :item="product"></HeartIcon>
           <div class="list_item">
             <h2>{{product.name}}</h2>
             <h4>{{product.description}}</h4>

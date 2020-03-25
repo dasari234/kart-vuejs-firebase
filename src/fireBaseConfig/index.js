@@ -29,7 +29,7 @@ const usersCollection = db.collection('users');
 const productsCollection = db.collection('products');
 const cartsCollection = db.collection('carts');
 const ordersCollection = db.collection('orders');
-
+const wishListCollection = db.collection('wishlist');
 const storageRef = firebase.storage().ref();
 
 const batch = db.batch();
@@ -43,5 +43,6 @@ export {
     productsCollection,
     cartsCollection,
     ordersCollection,
-    storageRef
+    storageRef,
+    wishListCollection
 }
