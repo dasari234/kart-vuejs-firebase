@@ -2,14 +2,14 @@
   <div class="cart app-container">
     <div v-cloak class="row">
       <div class="col-md-8">
-        <div class="card mb-4 shadow-sm my-cart">
-          <div class="title">Delivery Address</div>
-          <Address @continue-address="continueAddress()"></Address>
+        <div class="card mb-4 shadow-sm my-cart" :class="{'_active' :!isAddress}">
+          <div class="_title">Delivery Address</div>
+          <Address @continue-address="continueAddress()" v-if="isAddress"></Address>
         </div>
 
-        <div class="card mb-4 shadow-sm my-cart">
-          <div class="title">Order Summary</div>
-          <div class="card-body">
+        <div class="card mb-4 shadow-sm my-cart" :class="{'_active' :isOrderActive}">
+          <div class="_title">Order Summary</div>
+          <div class="card-body" v-if="isOrder">
             <CartList></CartList>
             <div class="continue-container">
               <button class="chekout-button" v-on:click="continueOrdersummary()">
@@ -19,11 +19,9 @@
           </div>
         </div>
 
-        <div class="card mb-4 shadow-sm my-cart">
-          <div class="title">Payment</div>
-          <div class="card-body">
-            <div>fdfdfd</div>
-          </div>
+        <div class="card mb-4 shadow-sm my-cart" :class="{'_active' :isPaymentActive}">
+          <div class="_title">Payment</div>
+          <Payment :total="total" v-if="isPayment" @continue-payment="continuePayment"></Payment>
         </div>
       </div>
 
@@ -38,13 +36,20 @@
 import { mapGetters, mapActions } from "vuex";
 import PriceDetails from "@/components/shop/PriceDetails";
 import CartList from "@/components/shop/CartList";
-
+import Payment from "@/components/shop/Payment";
 import Address from "@/components/shared/Address";
 const fb = require("../../fireBaseConfig");
 
 export default {
   name: "cart",
-  components: { PriceDetails, CartList, Address },
+  components: { PriceDetails, CartList, Address, Payment },
+  data: () => ({
+    isAddress: true,
+    isOrderActive: false,
+    isPaymentActive: false,
+    isOrder: false,
+    isPayment: false
+  }),
   computed: {
     ...mapGetters("shops", { total: "getTotal" })
   },
@@ -82,9 +87,19 @@ export default {
     },
     continueAddress() {
       console.log("Address Clicked!");
+      this.isAddress = !this.isAddress;
+      this.isOrder = !this.isOrder;
     },
     continueOrdersummary() {
       console.log("summury Clicked!");
+      this.isOrder = !this.isOrder;
+      this.isPayment = !this.isPayment;
+      this.isOrderActive = true;
+    },
+    continuePayment() {
+      console.log("payment Clicked!");
+      this.isPayment = !this.isPayment;
+      this.isPaymentActive = true;
     }
   }
 };
@@ -94,8 +109,13 @@ export default {
 .thead-light {
   background: #f8f9fa;
 }
-.title {
-  font-size: 14px;
+._active {
+  ._title {
+    background: #4fc08d;
+  }
+}
+._title {
+  font-size: 14px !important;
   font-weight: bold;
   padding: 15px 15px;
   text-transform: uppercase;

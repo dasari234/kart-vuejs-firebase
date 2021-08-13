@@ -12,7 +12,10 @@
       <h6 class="title" v-on:click="addItemToCart(item)">{{item.name}}</h6>
       <p class="description">{{item.description}}</p>
       <div class="d-flex justify-content-between align-items-center">
-        <a
+    
+         <Likes :item="item"></Likes>
+        <Unlikes :item="item"></Unlikes>
+            <a
           href="javascript:void(0)"
           class="view-details-link"
           v-on:click="gotoProductDetails(item)"
@@ -36,6 +39,7 @@
           </button>
         </small>
       </div>
+
     </div>
   </div>
 </template>
@@ -44,9 +48,11 @@
 import { mapActions } from "vuex";
 const fb = require("../../fireBaseConfig");
 import HeartIcon from "@/components/shared/HeartIcon";
+import Likes from "@/components/shared/Likes";
+import Unlikes from "@/components/shared/Unlikes";
 export default {
   name: "cardTemplate",
-  components: { HeartIcon },
+  components: { HeartIcon, Likes, Unlikes },
   props: ["item"],
   methods: {
     ...mapActions("shops", ["addToCart"]),
@@ -85,6 +91,7 @@ export default {
   .card-body {
     display: flex;
     flex-direction: column;
+    padding: 10px;
     .view-details-link {
       text-decoration: none;
       &:hover {
@@ -95,7 +102,6 @@ export default {
       flex: 1 0 auto;
     }
     .footer-icons {
-      margin-top: 10px;
       .add-to-cart-button {
         border-radius: 4px;
         background: #30a0ee;
@@ -110,6 +116,13 @@ export default {
         svg {
           margin-right: 5px;
         }
+      }
+    }
+    .social-icons {
+      display: flex;
+      flex-direction: row;
+      .likes {
+        margin-right: 10px;
       }
     }
   }

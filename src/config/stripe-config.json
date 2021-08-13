@@ -1,0 +1,14 @@
+{
+    "development": {
+        "stripe_public_key":"pk_test_FPGscyWoGiacTZDmekonKzFA00XUW16RZH",
+        "stripe_secret_key":"sk_test_wMeFjkJE7hJfM4wHR7xeVpmW00uH9UYUF9"
+    },
+    "test": {
+      "stripe_public_key":"pk_test_FPGscyWoGiacTZDmekonKzFA00XUW16RZH",
+      "stripe_secret_key":"sk_test_wMeFjkJE7hJfM4wHR7xeVpmW00uH9UYUF9"
+    },
+    "staging": {
+        "stripe_public_key":"pk_test_FPGscyWoGiacTZDmekonKzFA00XUW16RZH",
+        "stripe_secret_key":"sk_test_wMeFjkJE7hJfM4wHR7xeVpmW00uH9UYUF9"
+    }
+  }

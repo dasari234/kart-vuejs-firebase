@@ -9,7 +9,7 @@
         <ul class="inline">
           <li v-if="!currentUser">
             <router-link to="/login">
-              <i class="fas fa-sign-in-alt"></i> Login
+              <i class="fas fa-user-circle"></i>
             </router-link>
           </li>
           <li v-if="currentUser">
@@ -114,10 +114,10 @@ export default {
 <style lang='scss' scoped>
 .inline {
   a {
-    padding: 7px;
+       padding-top: 10px;
     text-decoration: none;
     i {
-      padding-right: 5px;
+      font-size: 20px;
     }
   }
 }

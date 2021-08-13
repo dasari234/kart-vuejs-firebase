@@ -35,6 +35,11 @@ let router = new Router({
             }
         },
         {
+            path: '/flight',
+            name: 'flight',
+            component: Dashboard,
+        },
+        {
             path: '/login',
             name: 'login',
             component: Login

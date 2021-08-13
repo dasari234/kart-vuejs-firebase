@@ -25,7 +25,7 @@ export default {
           .where("pId", "==", this.item.id)
           .where("isWish", "==", true);
         await query.get().then(docs => {
-          docs.forEach(doc => {
+          docs.forEach(doc => {            
             this.isWish = doc.data().isWish;
           });
         });

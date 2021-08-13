@@ -1,26 +1,26 @@
 <template>
   <div id="dashboard" class="app-container">
-    <section class="row">
+    <!-- <section class="row">
       <div class="col1">
         <div class="profile">
           <h5>Hi {{userProfile.firstName}}, {{userProfile.role}}</h5>
         </div>
       </div>
-    </section>
+    </section>-->
+    <SearchForm></SearchForm>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+
+import SearchForm from "@/components/search/SearchForm";
+
 export default {
-  computed: {
-    ...mapGetters("users", { userProfile: "getUserProfile" })
-  }
+  name: "dashboard",
+  components: { SearchForm },
 };
 </script>
 
 <style lang="scss" scoped>
-.app-container{
-  margin-left: 10px;
-}
+
 </style>
