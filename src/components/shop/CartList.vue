@@ -60,7 +60,7 @@ export default {
     addItemToCart(product, isMinus) {
       if (isMinus) {
         product.qtyType = "minus";
-      }
+      }else{product.qtyType = "plus";}
       this.addToCart(product);
     },
     removeItemFromCart(item) {
