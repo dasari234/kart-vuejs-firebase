@@ -23,10 +23,10 @@ export default {
                 if (!record) {
                     item.quantity = 1;
                     record = item;
-                } else if(item.qtyType == 'minus'){
+                } else if(item.qtyType === 'minus'){
                     record.quantity--;
-                }else if(item.qtyType == 'input'){
-                    if(item.quantity =='0'){
+                }else if(item.qtyType === 'input'){
+                    if(item.quantity === '0'){
                         record.quantity
                     }else{
                         record.quantity = item.quantity
